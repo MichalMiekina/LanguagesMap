@@ -4,6 +4,10 @@ using System.Diagnostics;
 using System.Net;
 using System.Web;
 using System.Windows.Forms;
+using System.Drawing;
+using System.IO;
+
+
 
 namespace WinFormsApp1
 {
@@ -123,6 +127,26 @@ namespace WinFormsApp1
 
             // Reset the stopwatch for the next translation
             stopwatch.Reset();
+
+            string imageUrl = "https://img.redro.pl/plakaty/simplified-map-of-europe-rounded-shapes-of-states-with-smoothed-border-grey-simple-flat-blank-vector-map-700-255204020.jpg"; // Replace with the actual URL of the image
+            try
+            {
+                using (WebClient webClient = new WebClient())
+                {
+                    byte[] imageData = webClient.DownloadData(imageUrl); // Download image data
+                    using (MemoryStream ms = new MemoryStream(imageData))
+                    {
+                        Image originalImage = Image.FromStream(ms); // Create image from data
+                        pictureBox1.Image = ScaleImage(originalImage, pictureBox1.Width, pictureBox1.Height); // Scale image and assign to PictureBox
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to load image from URL: {ex.Message}");
+            }
+
+
         }
 
         static string TranslateText(string input, string fromLanguage, string toLanguage)
@@ -159,6 +183,27 @@ namespace WinFormsApp1
 
             // Retrieve language code from dictionary based on language name
             return languageCodes.ContainsKey(languageName) ? languageCodes[languageName] : ""; // Return empty string if language name is not found
+        }
+
+
+        private Image ScaleImage(Image image, int maxWidth, int maxHeight)
+        {
+            int newWidth;
+            int newHeight;
+            double aspectRatio = (double)image.Width / image.Height;
+
+            if (aspectRatio > 1) // Landscape orientation
+            {
+                newWidth = maxWidth;
+                newHeight = (int)(maxWidth / aspectRatio);
+            }
+            else // Portrait or square orientation
+            {
+                newWidth = (int)(maxHeight * aspectRatio);
+                newHeight = maxHeight;
+            }
+
+            return new Bitmap(image, newWidth, newHeight);
         }
 
 
