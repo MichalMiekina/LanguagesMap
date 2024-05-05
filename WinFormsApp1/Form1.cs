@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net;
 using System.Web;
 using System.Windows.Forms;
@@ -12,6 +13,9 @@ namespace WinFormsApp1
         private const int LabelHeight = 20;
         private const int LabelMargin = 5;
         private const int LabelStartY = 100;
+
+        private Stopwatch stopwatch; // Stopwatch to measure time
+        private Label elapsedTimeLabel; // Label to display elapsed time
 
         public Form1()
         {
@@ -30,10 +34,25 @@ namespace WinFormsApp1
 
             // Set default selection
             comboBox1.SelectedIndex = 0; // Select the first item by default
+
+            // Initialize the stopwatch
+            stopwatch = new Stopwatch();
+
+            // Create the label for displaying elapsed time
+            elapsedTimeLabel = new Label
+            {
+                Location = new System.Drawing.Point(LabelMargin, LabelStartY - LabelHeight - LabelMargin),
+                Size = new System.Drawing.Size(300, LabelHeight),
+                Name = "elapsedTimeLabel"
+            };
+            Controls.Add(elapsedTimeLabel); // Add the label to the form
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            // Start the stopwatch when the button is clicked
+            stopwatch.Start();
+
             string inputText = textBox1.Text;
             string fromLanguageName = comboBox1.Text; // Get the selected language name from the ComboBox
             string fromLanguageCode = GetLanguageCode(fromLanguageName); // Convert language name to language code
@@ -95,9 +114,16 @@ namespace WinFormsApp1
                 Controls.Add(label);
                 currentY += LabelHeight + LabelMargin;
             }
+
+            // Stop the stopwatch after translation is complete
+            stopwatch.Stop();
+
+            // Display elapsed time in the label
+            elapsedTimeLabel.Text = $"Translation took {stopwatch.ElapsedMilliseconds} ms";
+
+            // Reset the stopwatch for the next translation
+            stopwatch.Reset();
         }
-
-
 
         static string TranslateText(string input, string fromLanguage, string toLanguage)
         {
@@ -136,9 +162,5 @@ namespace WinFormsApp1
         }
 
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
     }
 }
