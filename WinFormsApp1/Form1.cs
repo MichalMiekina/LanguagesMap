@@ -6,6 +6,7 @@ using System.Web;
 using System.Windows.Forms;
 using System.Drawing;
 using System.IO;
+using LanguagesMap;
 using Newtonsoft.Json.Linq;
 
 
@@ -32,9 +33,9 @@ namespace WinFormsApp1
             comboBox1.Items.Add("Polish");
             comboBox1.Items.Add("French");
             comboBox1.Items.Add("English");
-            comboBox1.Items.Add("Italian");
-            comboBox1.Items.Add("German");
-            comboBox1.Items.Add("Russian");
+            //comboBox1.Items.Add("Italian");
+            //comboBox1.Items.Add("German");
+            //comboBox1.Items.Add("Russian");
 
             // Set default selection
             comboBox1.SelectedIndex = 0; // Select the first item by default
@@ -72,83 +73,50 @@ namespace WinFormsApp1
                 {"Polish", "pl"},
                 {"French", "fr"},
                 {"English", "en"},
-                {"Italian", "it"},
-                {"German", "de"},
-                {"Russian", "ru"}
+                //{"Italian", "it"},
+                //{"German", "de"},
+                //{"Russian", "ru"}
             };
 
-            // Create a list to store labels that need to be removed
-            List<Label> labelsToRemove = new List<Label>();
-
-            // Identify labels that need to be removed
-            foreach (Control control in Controls)
+            // List of country translations
+            List<CountryTranslation> countryTranslations = new List<CountryTranslation>
             {
-                if (control is Label && control.Name.StartsWith("translatedLabel_"))
-                {
-                    labelsToRemove.Add((Label)control);
-                }
+                // Add data for each country
+                new CountryTranslation(1377, 1277, "Poland", "Polish", "pl"),
+                new CountryTranslation(700, 1640, "France", "French", "fr"),
+                new CountryTranslation(580, 1280, "UK", "English", "en"),
+                // Add more countries as needed
+            };
+
+            // Translate country names and update the results
+            foreach (var country in countryTranslations)
+            {
+                country.TranslationResult = TranslateText(inputText, fromLanguage, languageCodes[country.Language]);
             }
 
-            // Remove and dispose of labels
-            foreach (Label label in labelsToRemove)
-            {
-                Controls.Remove(label);
-                label.Dispose();
-            }
-
-            // Translate the input text into each target language and display the result using labels
-            int currentY = LabelStartY;
-            foreach (var kvp in languageCodes)
-            {
-                string targetLanguage = kvp.Value;
-
-                // Skip translation if the target language is the same as the input language
-                if (targetLanguage == fromLanguage)
-                    continue;
-
-                string translatedText = TranslateText(inputText, fromLanguage, targetLanguage);
-                Label label = new Label
-                {
-                    Text = $"{kvp.Key}: {translatedText}",
-                    Location = new System.Drawing.Point(LabelMargin, currentY),
-                    Size = new System.Drawing.Size(LabelWidth, LabelHeight),
-                    Name = $"translatedLabel_{kvp.Key}" // Assigning a name with the prefix "translatedLabel_"
-                };
-
-                Controls.Add(label);
-                currentY += LabelHeight + LabelMargin;
-            }
-
-            // Stop the stopwatch after translation is complete
-            stopwatch.Stop();
-
-            // Display elapsed time in the label
-            elapsedTimeLabel.Text = $"Translation took {stopwatch.ElapsedMilliseconds} ms";
-
-            // Reset the stopwatch for the next translation
-            stopwatch.Reset();
-
+            // Load the map image
             string imagePath = "./europe.png"; // Update this with the path to your image file
             try
             {
                 using (FileStream fs = new FileStream(imagePath, FileMode.Open))
                 {
                     Image originalImage = Image.FromStream(fs); // Create image from file stream
-                    DisplayTranslatedImage(originalImage, textBox1.Text); // Display translated image with text
+
+                    // Display translated image with text
+                    DisplayTranslatedImage(originalImage, countryTranslations);
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Failed to load image: {ex.Message}");
             }
-
-
-
         }
+
+
         private void AddTextToImage(Image image, string text, int centerX, int centerY, int originalWidth, int originalHeight)
         {
             using (Graphics graphics = Graphics.FromImage(image))
-            using (Font font = new Font("Arial", 4, FontStyle.Bold))
+            using (Font font = new Font("Arial", 40, FontStyle.Bold))
             using (StringFormat stringFormat = new StringFormat())
             {
                 // Set string alignment to center
@@ -174,18 +142,41 @@ namespace WinFormsApp1
 
 
 
-        private void DisplayTranslatedImage(Image originalImage, string text)
+        private void DisplayTranslatedImage(Image originalImage, List<CountryTranslation> countryTranslations)
         {
-            // Scale image and assign to PictureBox
-            pictureBox1.Image = ScaleImage(originalImage, pictureBox1.Width, pictureBox1.Height);
+            // Create a copy of the original image to avoid modifying the original
+            Image modifiedImage = new Bitmap(originalImage);
 
-            // Add text with its center at specific pixel coordinates relative to the original image size
-            int centerX = 1377; // Example: X coordinate of the center of the text on the original image
-            int centerY = 1277; // Example: Y coordinate of the center of the text on the original image
-            int originalWidth = originalImage.Width; // Original width of the image
-            int originalHeight = originalImage.Height; // Original height of the image
-            AddTextToImage(pictureBox1.Image, text, centerX, centerY, originalWidth, originalHeight);
+            // Add translated text to the image for each country
+            foreach (var country in countryTranslations)
+            {
+                AddTextToImage(modifiedImage, country.TranslationResult, country.X, country.Y, originalImage.Width, originalImage.Height);
+            }
+
+            // Save the modified image locally
+            string outputDirectory = @"E:\europes"; // Output directory
+            string outputFileName = $"europe_{DateTime.Now:yyyyMMddHHmmss}.png"; // Output file name
+            string outputPath = Path.Combine(outputDirectory, outputFileName); // Full output path
+            try
+            {
+                // Create directory if it doesn't exist
+                if (!Directory.Exists(outputDirectory))
+                {
+                    Directory.CreateDirectory(outputDirectory);
+                }
+
+                // Save the image
+                modifiedImage.Save(outputPath, System.Drawing.Imaging.ImageFormat.Png);
+
+                MessageBox.Show($"Modified image saved to: {outputPath}");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to save image: {ex.Message}");
+            }
         }
+
+
 
         static string TranslateText(string input, string fromLanguage, string toLanguage)
         {
@@ -216,9 +207,9 @@ namespace WinFormsApp1
                 {"Polish", "pl"},
                 {"French", "fr"},
                 {"English", "en"},
-                {"Italian", "it"},
-                {"German", "de"},
-                {"Russian", "ru"}
+                //{"Italian", "it"},
+                //{"German", "de"},
+                //{"Russian", "ru"}
             };
 
             // Retrieve language code from dictionary based on language name
