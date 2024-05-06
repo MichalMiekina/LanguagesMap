@@ -6,14 +6,14 @@ using System.Web;
 using System.Windows.Forms;
 using System.Drawing;
 using System.IO;
-
+using Newtonsoft.Json.Linq;
 
 
 namespace WinFormsApp1
 {
     public partial class Form1 : Form
     {
-        private const int LabelWidth = 100;
+        private const int LabelWidth = 300;
         private const int LabelHeight = 20;
         private const int LabelMargin = 5;
         private const int LabelStartY = 100;
@@ -137,7 +137,8 @@ namespace WinFormsApp1
                     using (MemoryStream ms = new MemoryStream(imageData))
                     {
                         Image originalImage = Image.FromStream(ms); // Create image from data
-                        pictureBox1.Image = ScaleImage(originalImage, pictureBox1.Width, pictureBox1.Height); // Scale image and assign to PictureBox
+                        DisplayTranslatedImage(originalImage, "Result of Translation"); // Display translated image with text
+
                     }
                 }
             }
@@ -148,25 +149,54 @@ namespace WinFormsApp1
 
 
         }
+        private void AddTextToImage(Image image, string text)
+        {
+            using (Graphics graphics = Graphics.FromImage(image))
+            using (Font font = new Font("Arial", 12, FontStyle.Bold))
+            using (StringFormat stringFormat = new StringFormat())
+            {
+                // Set string alignment to center
+                stringFormat.Alignment = StringAlignment.Center;
+                stringFormat.LineAlignment = StringAlignment.Center;
+
+                // Calculate the rectangle to draw the text in the center of the image
+                Rectangle rect = new Rectangle(0, 0, image.Width, image.Height);
+
+                // Draw the text on the image
+                graphics.DrawString(text, font, Brushes.Black, rect, stringFormat);
+            }
+        }
+
+        private void DisplayTranslatedImage(Image originalImage, string text)
+        {
+            // Scale image and assign to PictureBox
+            pictureBox1.Image = ScaleImage(originalImage, pictureBox1.Width, pictureBox1.Height);
+
+            // Add text to the scaled image
+            AddTextToImage(pictureBox1.Image, text);
+        }
+
 
         static string TranslateText(string input, string fromLanguage, string toLanguage)
         {
             var url = $"https://translate.googleapis.com/translate_a/single?client=gtx&sl={fromLanguage}&tl={toLanguage}&dt=t&q={HttpUtility.UrlEncode(input)}";
-            var webClient = new WebClient
+            using (var webClient = new WebClient())
             {
-                Encoding = System.Text.Encoding.UTF8
-            };
-            var result = webClient.DownloadString(url);
-            try
-            {
-                result = result.Substring(4, result.IndexOf("\"", 4, StringComparison.Ordinal) - 4);
-                return result;
-            }
-            catch (Exception)
-            {
-                return "error";
+                var result = webClient.DownloadString(url);
+                try
+                {
+                    // Parse the JSON response to extract the translated text
+                    var jsonArray = JArray.Parse(result);
+                    var translatedText = jsonArray[0][0][0].ToString();
+                    return translatedText;
+                }
+                catch (Exception)
+                {
+                    return "error";
+                }
             }
         }
+
 
         private string GetLanguageCode(string languageName)
         {
