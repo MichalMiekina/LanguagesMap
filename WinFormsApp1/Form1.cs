@@ -128,54 +128,64 @@ namespace WinFormsApp1
             // Reset the stopwatch for the next translation
             stopwatch.Reset();
 
-            string imageUrl = "https://img.redro.pl/plakaty/simplified-map-of-europe-rounded-shapes-of-states-with-smoothed-border-grey-simple-flat-blank-vector-map-700-255204020.jpg"; // Replace with the actual URL of the image
+            string imagePath = "./europe.png"; // Update this with the path to your image file
             try
             {
-                using (WebClient webClient = new WebClient())
+                using (FileStream fs = new FileStream(imagePath, FileMode.Open))
                 {
-                    byte[] imageData = webClient.DownloadData(imageUrl); // Download image data
-                    using (MemoryStream ms = new MemoryStream(imageData))
-                    {
-                        Image originalImage = Image.FromStream(ms); // Create image from data
-                        DisplayTranslatedImage(originalImage, "Result of Translation"); // Display translated image with text
-
-                    }
+                    Image originalImage = Image.FromStream(fs); // Create image from file stream
+                    DisplayTranslatedImage(originalImage, textBox1.Text); // Display translated image with text
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Failed to load image from URL: {ex.Message}");
+                MessageBox.Show($"Failed to load image: {ex.Message}");
             }
 
 
+
         }
-        private void AddTextToImage(Image image, string text)
+        private void AddTextToImage(Image image, string text, int centerX, int centerY, int originalWidth, int originalHeight)
         {
             using (Graphics graphics = Graphics.FromImage(image))
-            using (Font font = new Font("Arial", 12, FontStyle.Bold))
+            using (Font font = new Font("Arial", 4, FontStyle.Bold))
             using (StringFormat stringFormat = new StringFormat())
             {
                 // Set string alignment to center
                 stringFormat.Alignment = StringAlignment.Center;
                 stringFormat.LineAlignment = StringAlignment.Center;
 
-                // Calculate the rectangle to draw the text in the center of the image
-                Rectangle rect = new Rectangle(0, 0, image.Width, image.Height);
+                // Calculate the scaling factor between the original and displayed image sizes
+                float scaleX = (float)image.Width / originalWidth;
+                float scaleY = (float)image.Height / originalHeight;
+
+                // Calculate the absolute pixel coordinates on the original image
+                int absCenterX = (int)(centerX * scaleX);
+                int absCenterY = (int)(centerY * scaleY);
+
+                // Calculate the rectangle to draw the text around the specified center point
+                Size textSize = TextRenderer.MeasureText(text, font);
+                Rectangle rect = new Rectangle(absCenterX - textSize.Width / 2, absCenterY - textSize.Height / 2, textSize.Width, textSize.Height);
 
                 // Draw the text on the image
                 graphics.DrawString(text, font, Brushes.Black, rect, stringFormat);
             }
         }
 
+
+
         private void DisplayTranslatedImage(Image originalImage, string text)
         {
             // Scale image and assign to PictureBox
             pictureBox1.Image = ScaleImage(originalImage, pictureBox1.Width, pictureBox1.Height);
 
-            // Add text to the scaled image
-            AddTextToImage(pictureBox1.Image, text);
+            // Add text with its center at specific pixel coordinates relative to the original image size
+            int centerX = 1377; // Example: X coordinate of the center of the text on the original image
+            int centerY = 1277; // Example: Y coordinate of the center of the text on the original image
+            int originalWidth = originalImage.Width; // Original width of the image
+            int originalHeight = originalImage.Height; // Original height of the image
+            AddTextToImage(pictureBox1.Image, text, centerX, centerY, originalWidth, originalHeight);
         }
-
 
         static string TranslateText(string input, string fromLanguage, string toLanguage)
         {
