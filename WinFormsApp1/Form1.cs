@@ -100,10 +100,13 @@ namespace WinFormsApp1
             {
                 using (FileStream fs = new FileStream(imagePath, FileMode.Open))
                 {
-                    Image originalImage = Image.FromStream(fs); // Create image from file stream
+                    Image originalImage = Image.FromStream(fs);
+
+                    // TODO add bucket/filling country with a color
 
                     // Display translated image with text
                     DisplayTranslatedImage(originalImage, countryTranslations);
+
                 }
             }
             catch (Exception ex)
@@ -168,7 +171,11 @@ namespace WinFormsApp1
                 // Save the image
                 modifiedImage.Save(outputPath, System.Drawing.Imaging.ImageFormat.Png);
 
+                // Display a message box with the path to the saved image
                 MessageBox.Show($"Modified image saved to: {outputPath}");
+
+                // Display the modified image in a new window
+                ShowModifiedImageForm(modifiedImage);
             }
             catch (Exception ex)
             {
@@ -176,6 +183,17 @@ namespace WinFormsApp1
             }
         }
 
+        private void ShowModifiedImageForm(Image modifiedImage)
+        {
+            // Create a new instance of ModifiedImageForm
+            ModifiedImageForm modifiedImageForm = new ModifiedImageForm();
+
+            // Set the PictureBox image to the modified image
+            modifiedImageForm.pictureBoxModifiedImage.Image = modifiedImage;
+
+            // Show the ModifiedImageForm
+            modifiedImageForm.ShowDialog();
+        }
 
 
         static string TranslateText(string input, string fromLanguage, string toLanguage)
@@ -217,25 +235,6 @@ namespace WinFormsApp1
         }
 
 
-        private Image ScaleImage(Image image, int maxWidth, int maxHeight)
-        {
-            int newWidth;
-            int newHeight;
-            double aspectRatio = (double)image.Width / image.Height;
-
-            if (aspectRatio > 1) // Landscape orientation
-            {
-                newWidth = maxWidth;
-                newHeight = (int)(maxWidth / aspectRatio);
-            }
-            else // Portrait or square orientation
-            {
-                newWidth = (int)(maxHeight * aspectRatio);
-                newHeight = maxHeight;
-            }
-
-            return new Bitmap(image, newWidth, newHeight);
-        }
 
 
     }
