@@ -73,20 +73,92 @@ namespace WinFormsApp1
                 {"Polish", "pl"},
                 {"French", "fr"},
                 {"English", "en"},
-                //{"Italian", "it"},
-                //{"German", "de"},
-                //{"Russian", "ru"}
+                {"German", "de"},
+                {"Italian", "it"},
+                {"Spanish", "es"},
+                {"Dutch", "nl"},
+                {"Luxembourgish", "lb"},
+                {"Czech", "cs"},
+                {"Slovak", "sk"},
+                {"Hungarian", "hu"},
+                {"Croatian", "hr"},
+                {"Bosnian", "bs"},
+                {"Serbian", "sr"},
+                {"Montenegrin", "cnr"},
+                {"Albanian", "sq"},
+                {"Greek", "el"},
+                {"Bulgarian", "bg"},
+                {"Romanian", "ro"},
+                {"Slovenian", "sl"},
+                {"Macedonian", "mk"},
+                {"Ukrainian", "uk"},
+                {"Belarusian", "be"},
+                {"Lithuanian", "lt"},
+                {"Latvian", "lv"},
+                {"Estonian", "et"},
+                {"Norwegian", "no"},
+                {"Swedish", "sv"},
+                {"Finnish", "fi"},
+                {"Icelandic", "is"},
+                {"Portuguese", "pt"},
+                {"Irish", "ga"},
+                {"Maltese", "mt"},
+                {"Russian", "ru"}
             };
 
             // List of country translations
+            //List<CountryTranslation> countryTranslations = new List<CountryTranslation>
+            //{
+            //    // Add data for each country
+            //    new CountryTranslation(1377, 1277, "Poland", "Polish", "pl"),
+            //    new CountryTranslation(700, 1640, "France", "French", "fr"),
+            //    new CountryTranslation(580, 1280, "UK", "English", "en"),
+            //    // Add more countries as needed
+            //};
             List<CountryTranslation> countryTranslations = new List<CountryTranslation>
             {
-                // Add data for each country
                 new CountryTranslation(1377, 1277, "Poland", "Polish", "pl"),
                 new CountryTranslation(700, 1640, "France", "French", "fr"),
                 new CountryTranslation(580, 1280, "UK", "English", "en"),
-                // Add more countries as needed
+                new CountryTranslation(1500, 1300, "Germany", "German", "de"),
+                new CountryTranslation(1450, 1400, "Italy", "Italian", "it"),
+                new CountryTranslation(1400, 1200, "Spain", "Spanish", "es"),
+                new CountryTranslation(1550, 1350, "Netherlands", "Dutch", "nl"),
+                new CountryTranslation(1650, 1250, "Belgium", "Dutch", "nl"),
+                new CountryTranslation(1600, 1200, "Luxembourg", "Luxembourgish", "lb"),
+                new CountryTranslation(1350, 1150, "Austria", "German", "de"),
+                new CountryTranslation(1700, 1300, "Switzerland", "German", "de"),
+                new CountryTranslation(1200, 1250, "Czech Republic", "Czech", "cs"),
+                new CountryTranslation(1300, 1150, "Slovakia", "Slovak", "sk"),
+                new CountryTranslation(1100, 1200, "Hungary", "Hungarian", "hu"),
+                new CountryTranslation(1150, 1300, "Croatia", "Croatian", "hr"),
+                new CountryTranslation(1050, 1350, "Bosnia and Herzegovina", "Bosnian", "bs"),
+                new CountryTranslation(1000, 1250, "Serbia", "Serbian", "sr"),
+                new CountryTranslation(900, 1300, "Montenegro", "Montenegrin", "cnr"),
+                new CountryTranslation(950, 1200, "Albania", "Albanian", "sq"),
+                new CountryTranslation(850, 1150, "Greece", "Greek", "el"),
+                new CountryTranslation(1400, 1000, "Bulgaria", "Bulgarian", "bg"),
+                new CountryTranslation(1250, 1100, "Romania", "Romanian", "ro"),
+                new CountryTranslation(1500, 1100, "Slovenia", "Slovenian", "sl"),
+                new CountryTranslation(1600, 1050, "Moldova", "Romanian", "ro"),
+                new CountryTranslation(1150, 1050, "North Macedonia", "Macedonian", "mk"),
+                new CountryTranslation(1050, 1150, "Kosovo", "Albanian", "sq"),
+                new CountryTranslation(1400, 900, "Ukraine", "Ukrainian", "uk"),
+                new CountryTranslation(1300, 900, "Belarus", "Belarusian", "be"),
+                new CountryTranslation(1200, 950, "Lithuania", "Lithuanian", "lt"),
+                new CountryTranslation(1100, 1000, "Latvia", "Latvian", "lv"),
+                new CountryTranslation(1000, 950, "Estonia", "Estonian", "et"),
+                new CountryTranslation(1200, 1400, "Norway", "Norwegian", "no"),
+                new CountryTranslation(1100, 1350, "Sweden", "Swedish", "sv"),
+                new CountryTranslation(1000, 1400, "Finland", "Finnish", "fi"),
+                new CountryTranslation(900, 1600, "Iceland", "Icelandic", "is"),
+                new CountryTranslation(1600, 1400, "Portugal", "Portuguese", "pt"),
+                new CountryTranslation(1700, 1500, "Ireland", "Irish", "ga"),
+                new CountryTranslation(1800, 1550, "Cyprus", "Greek", "el"),
+                new CountryTranslation(1900, 1300, "Malta", "Maltese", "mt")
             };
+
+
 
             // Translate country names and update the results
             foreach (var country in countryTranslations)
@@ -100,18 +172,51 @@ namespace WinFormsApp1
             {
                 using (FileStream fs = new FileStream(imagePath, FileMode.Open))
                 {
-                    Image originalImage = Image.FromStream(fs);
+                    Bitmap originalImage = (Bitmap)Image.FromStream(fs);
 
-                    // TODO add bucket/filling country with a color
+                    // Fill regions with color before adding text
+                    foreach (var country in countryTranslations)
+                    {
+                        Point regionPoint = new Point(country.X, country.Y); // Point within the region
+                        Color targetColor = originalImage.GetPixel(regionPoint.X, regionPoint.Y); // The color to be replaced
+                        Color fillColor = Color.FromArgb(128, Color.Red); // Semi-transparent red fill color
+                        FloodFill(originalImage, regionPoint, targetColor, fillColor);
+                    }
 
                     // Display translated image with text
                     DisplayTranslatedImage(originalImage, countryTranslations);
-
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Failed to load image: {ex.Message}");
+            }
+        }
+
+
+        private void FloodFill(Bitmap bmp, Point pt, Color targetColor, Color replacementColor)
+        {
+            if (targetColor.ToArgb() == replacementColor.ToArgb())
+                return;
+
+            Stack<Point> pixels = new Stack<Point>();
+            pixels.Push(pt);
+
+            while (pixels.Count > 0)
+            {
+                Point currentPixel = pixels.Pop();
+                if (currentPixel.X < 0 || currentPixel.X >= bmp.Width || currentPixel.Y < 0 || currentPixel.Y >= bmp.Height)
+                    continue;
+
+                if (bmp.GetPixel(currentPixel.X, currentPixel.Y) == targetColor)
+                {
+                    bmp.SetPixel(currentPixel.X, currentPixel.Y, replacementColor);
+
+                    pixels.Push(new Point(currentPixel.X - 1, currentPixel.Y));
+                    pixels.Push(new Point(currentPixel.X + 1, currentPixel.Y));
+                    pixels.Push(new Point(currentPixel.X, currentPixel.Y - 1));
+                    pixels.Push(new Point(currentPixel.X, currentPixel.Y + 1));
+                }
             }
         }
 
@@ -219,16 +324,44 @@ namespace WinFormsApp1
 
         private string GetLanguageCode(string languageName)
         {
-            // Dictionary to map language names to language codes
             Dictionary<string, string> languageCodes = new Dictionary<string, string>
             {
                 {"Polish", "pl"},
                 {"French", "fr"},
                 {"English", "en"},
-                //{"Italian", "it"},
-                //{"German", "de"},
-                //{"Russian", "ru"}
+                {"German", "de"},
+                {"Italian", "it"},
+                {"Spanish", "es"},
+                {"Dutch", "nl"},
+                {"Luxembourgish", "lb"},
+                {"Czech", "cs"},
+                {"Slovak", "sk"},
+                {"Hungarian", "hu"},
+                {"Croatian", "hr"},
+                {"Bosnian", "bs"},
+                {"Serbian", "sr"},
+                {"Montenegrin", "cnr"},
+                {"Albanian", "sq"},
+                {"Greek", "el"},
+                {"Bulgarian", "bg"},
+                {"Romanian", "ro"},
+                {"Slovenian", "sl"},
+                {"Macedonian", "mk"},
+                {"Ukrainian", "uk"},
+                {"Belarusian", "be"},
+                {"Lithuanian", "lt"},
+                {"Latvian", "lv"},
+                {"Estonian", "et"},
+                {"Norwegian", "no"},
+                {"Swedish", "sv"},
+                {"Finnish", "fi"},
+                {"Icelandic", "is"},
+                {"Portuguese", "pt"},
+                {"Irish", "ga"},
+                {"Maltese", "mt"},
+                {"Russian", "ru"}
             };
+
 
             // Retrieve language code from dictionary based on language name
             return languageCodes.ContainsKey(languageName) ? languageCodes[languageName] : ""; // Return empty string if language name is not found
