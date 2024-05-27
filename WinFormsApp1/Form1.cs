@@ -8,7 +8,8 @@ using System.Drawing;
 using System.IO;
 using LanguagesMap;
 using Newtonsoft.Json.Linq;
-
+using Newtonsoft.Json;
+using System.Linq;
 
 namespace WinFormsApp1
 {
@@ -106,15 +107,6 @@ namespace WinFormsApp1
                 {"Russian", "ru"}
             };
 
-            // List of country translations
-            //List<CountryTranslation> countryTranslations = new List<CountryTranslation>
-            //{
-            //    // Add data for each country
-            //    new CountryTranslation(1377, 1277, "Poland", "Polish", "pl"),
-            //    new CountryTranslation(700, 1640, "France", "French", "fr"),
-            //    new CountryTranslation(580, 1280, "UK", "English", "en"),
-            //    // Add more countries as needed
-            //};
             List<CountryTranslation> countryTranslations = new List<CountryTranslation>
             {
                 new CountryTranslation(1377, 1277, "Poland", "Polish", "pl"),
@@ -165,7 +157,21 @@ namespace WinFormsApp1
             {
                 country.TranslationResult = TranslateText(inputText, fromLanguage, languageCodes[country.Language]);
             }
+            // Create a new list with only CountryName and TranslationResult properties
+            var simplifiedTranslations = countryTranslations.Select(ct => new { CountryName = ct.CountryName, TranslationResult = ct.TranslationResult }).ToList();
 
+            // Serialize the list of simplified translations into JSON format
+            string jsonOutput = JsonConvert.SerializeObject(simplifiedTranslations);
+
+
+            // Specify the path for the JSON output file
+            string jsonFilePath = Path.Combine("translated", "translations.json");
+
+            // Write the JSON data to a file
+            File.WriteAllText(jsonFilePath, jsonOutput);
+
+            // Display a message box with the path to the JSON file
+            MessageBox.Show($"Translation results saved to: {jsonFilePath}");
             // Load the map image
             string imagePath = "./europe.png"; // Update this with the path to your image file
             try
@@ -366,9 +372,5 @@ namespace WinFormsApp1
             // Retrieve language code from dictionary based on language name
             return languageCodes.ContainsKey(languageName) ? languageCodes[languageName] : ""; // Return empty string if language name is not found
         }
-
-
-
-
     }
 }
