@@ -90,7 +90,7 @@ namespace WinFormsApp1
                 {"Greek", "el"},
                 {"Bulgarian", "bg"},
                 {"Romanian", "ro"},
-                {"Slovenian", "sl"},
+                {"Slovene", "sl"},
                 {"Macedonian", "mk"},
                 {"Ukrainian", "uk"},
                 {"Belarusian", "be"},
@@ -112,42 +112,39 @@ namespace WinFormsApp1
                 new CountryTranslation(1377, 1277, "Poland", "Polish", "pl"),
                 new CountryTranslation(700, 1640, "France", "French", "fr"),
                 new CountryTranslation(580, 1280, "UK", "English", "en"),
-                new CountryTranslation(1500, 1300, "Germany", "German", "de"),
-                new CountryTranslation(1450, 1400, "Italy", "Italian", "it"),
-                new CountryTranslation(1400, 1200, "Spain", "Spanish", "es"),
-                new CountryTranslation(1550, 1350, "Netherlands", "Dutch", "nl"),
-                new CountryTranslation(1650, 1250, "Belgium", "Dutch", "nl"),
-                new CountryTranslation(1600, 1200, "Luxembourg", "Luxembourgish", "lb"),
-                new CountryTranslation(1350, 1150, "Austria", "German", "de"),
-                new CountryTranslation(1700, 1300, "Switzerland", "German", "de"),
-                new CountryTranslation(1200, 1250, "Czech Republic", "Czech", "cs"),
-                new CountryTranslation(1300, 1150, "Slovakia", "Slovak", "sk"),
-                new CountryTranslation(1100, 1200, "Hungary", "Hungarian", "hu"),
-                new CountryTranslation(1150, 1300, "Croatia", "Croatian", "hr"),
-                new CountryTranslation(1050, 1350, "Bosnia and Herzegovina", "Bosnian", "bs"),
-                new CountryTranslation(1000, 1250, "Serbia", "Serbian", "sr"),
-                new CountryTranslation(900, 1300, "Montenegro", "Montenegrin", "cnr"),
-                new CountryTranslation(950, 1200, "Albania", "Albanian", "sq"),
-                new CountryTranslation(850, 1150, "Greece", "Greek", "el"),
-                new CountryTranslation(1400, 1000, "Bulgaria", "Bulgarian", "bg"),
-                new CountryTranslation(1250, 1100, "Romania", "Romanian", "ro"),
-                new CountryTranslation(1500, 1100, "Slovenia", "Slovenian", "sl"),
-                new CountryTranslation(1600, 1050, "Moldova", "Romanian", "ro"),
-                new CountryTranslation(1150, 1050, "North Macedonia", "Macedonian", "mk"),
-                new CountryTranslation(1050, 1150, "Kosovo", "Albanian", "sq"),
-                new CountryTranslation(1400, 900, "Ukraine", "Ukrainian", "uk"),
-                new CountryTranslation(1300, 900, "Belarus", "Belarusian", "be"),
-                new CountryTranslation(1200, 950, "Lithuania", "Lithuanian", "lt"),
-                new CountryTranslation(1100, 1000, "Latvia", "Latvian", "lv"),
-                new CountryTranslation(1000, 950, "Estonia", "Estonian", "et"),
-                new CountryTranslation(1200, 1400, "Norway", "Norwegian", "no"),
-                new CountryTranslation(1100, 1350, "Sweden", "Swedish", "sv"),
-                new CountryTranslation(1000, 1400, "Finland", "Finnish", "fi"),
-                new CountryTranslation(900, 1600, "Iceland", "Icelandic", "is"),
-                new CountryTranslation(1600, 1400, "Portugal", "Portuguese", "pt"),
-                new CountryTranslation(1700, 1500, "Ireland", "Irish", "ga"),
-                new CountryTranslation(1800, 1550, "Cyprus", "Greek", "el"),
-                new CountryTranslation(1900, 1300, "Malta", "Maltese", "mt")
+                new CountryTranslation(1900, 1350, "Ukraine", "Ukrainian", "uk"),
+                new CountryTranslation(1038, 1300, "Germany", "German", "de"),
+                new CountryTranslation(370, 2000, "Spain", "Spanish", "es"),
+                new CountryTranslation(1100, 1922, "Italy", "Italian", "it"),
+                new CountryTranslation(1750, 1700, "Romania", "Romanian", "ro"),
+                new CountryTranslation(2200, 900, "Russia", "Russian", "ru"),
+                new CountryTranslation(1040, 800, "Norway", "Norwegian", "no"),
+                new CountryTranslation(115, 2025, "Portugal", "Portuguese", "pt"),
+                new CountryTranslation(835, 1321, "Netherlands", "Dutch", "nl"),
+                new CountryTranslation(800, 1400, "Belgium", "Dutch", "nl"),
+                new CountryTranslation(940, 1645, "Switzerland", "German", "de"),
+                new CountryTranslation(1227, 1587, "Austria", "German", "de"),
+                new CountryTranslation(1247, 1463, "Czech Republic", "Czech", "cs"),
+                new CountryTranslation(1441, 1600, "Hungary", "Hungarian", "hu"),
+                new CountryTranslation(1420, 1500, "Slovakia", "Slovak", "sk"),
+                new CountryTranslation(1230, 1700, "Slovenia", "Slovene", "sl"),
+                new CountryTranslation(1333, 1717, "Croatia", "Croatian", "hr"),
+                new CountryTranslation(1380, 1810, "Bosnia and Herzegovina", "Bosnian", "bs"),
+                new CountryTranslation(1530, 1790, "Serbia", "Serbian", "sr"),
+                new CountryTranslation(1450, 1800, "Montenegro", "Montenegrin", "sr"),
+                new CountryTranslation(1506, 1980, "Albania", "Albanian", "sq"),
+                new CountryTranslation(1580, 1950, "North Macedonia", "Macedonian", "mk"),
+                new CountryTranslation(1700, 1900, "Bulgaria", "Bulgarian", "bg"),
+                new CountryTranslation(1700, 2137, "Greece", "Greek", "el"),
+                new CountryTranslation(2222, 1888, "Turkey", "Turkish", "tr"),
+                new CountryTranslation(1450, 715, "Finland", "Finnish", "fi"),
+                new CountryTranslation(1200, 700, "Sweden", "Swedish", "sv"),
+                new CountryTranslation(1000, 1050, "Denmark", "Danish", "da"),
+                new CountryTranslation(1566, 1040, "Lithuania", "Lithuanian", "lt"),
+                new CountryTranslation(1560, 950, "Latvia", "Latvian", "lv"),
+                new CountryTranslation(1540, 840, "Estonia", "Estonian", "et"),
+                new CountryTranslation(1700, 1170, "Belarus", "Belarusian", "be"),
+
             };
 
 
@@ -155,7 +152,8 @@ namespace WinFormsApp1
             // Translate country names and update the results
             foreach (var country in countryTranslations)
             {
-                country.TranslationResult = TranslateText(inputText, fromLanguage, languageCodes[country.Language]);
+                //country.TranslationResult = TranslateText(inputText, fromLanguage, languageCodes[country.Language]);
+                country.TranslationResult = TranslateText(inputText, fromLanguage, country.LanguageCode);
             }
             // Create a new list with only CountryName and TranslationResult properties
             var simplifiedTranslations = countryTranslations.Select(ct => new { CountryName = ct.CountryName, TranslationResult = ct.TranslationResult }).ToList();
@@ -230,7 +228,7 @@ namespace WinFormsApp1
         private void AddTextToImage(Image image, string text, int centerX, int centerY, int originalWidth, int originalHeight)
         {
             using (Graphics graphics = Graphics.FromImage(image))
-            using (Font font = new Font("Arial", 40, FontStyle.Bold))
+            using (Font font = new Font("Arial", 20, FontStyle.Bold))
             using (StringFormat stringFormat = new StringFormat())
             {
                 // Set string alignment to center
