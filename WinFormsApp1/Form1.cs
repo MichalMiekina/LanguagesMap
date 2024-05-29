@@ -193,13 +193,10 @@ namespace WinFormsApp1
                             foreach (var coord in country.Coordinates)
                             {
                                 Point regionPoint = new Point(coord.Item1, coord.Item2); // Point within the region
-                                Color fillColor = Color.Blue; // Choose the color you want here
-                                FloodFill(originalImage, regionPoint, fillColor);
+                                FloodFill(originalImage, regionPoint, clusterColors[country.Cluster]);
                             }
                         }
 
-
-                        // Display translated image with text
                         DisplayTranslatedImage(originalImage, countryTranslations);
                     }
                 }
