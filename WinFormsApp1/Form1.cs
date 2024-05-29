@@ -64,14 +64,14 @@ namespace WinFormsApp1
             return new List<CountryTranslation>
             {
                 new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(1377, 1277) }, "Poland", "Polish", "pl"),
-                new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(700, 1640) }, "France", "French", "fr"),
-                new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(580, 1280) }, "UK", "English", "en"),
+                new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(700, 1640), Tuple.Create(975, 1950) }, "France", "French", "fr"),
+                new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(580, 1280), Tuple.Create(400, 1070) }, "UK", "English", "en"),
                 new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(1900, 1350) }, "Ukraine", "Ukrainian", "uk"),
                 new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(1038, 1300) }, "Germany", "German", "de"),
                 new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(370, 2000), Tuple.Create(669, 2096) }, "Spain", "Spanish", "es"),
-                new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(1100, 1922) }, "Italy", "Italian", "it"),
+                new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(1100, 1922), Tuple.Create(980, 2080), Tuple.Create(1237, 2237) }, "Italy", "Italian", "it"),
                 new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(1750, 1700) }, "Romania", "Romanian", "ro"),
-                new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(2200, 900) }, "Russia", "Russian", "ru"),
+                new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(2200, 900), Tuple.Create(2100, 1600), Tuple.Create(1450, 1100) }, "Russia", "Russian", "ru"),
                 new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(1040, 800) }, "Norway", "Norwegian", "no"),
                 new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(115, 2025) }, "Portugal", "Portuguese", "pt"),
                 new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(835, 1321) }, "Netherlands", "Dutch", "nl"),
@@ -85,18 +85,18 @@ namespace WinFormsApp1
                 new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(1333, 1717) }, "Croatia", "Croatian", "hr"),
                 new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(1380, 1810) }, "Bosnia and Herzegovina", "Bosnian", "bs"),
                 new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(1530, 1790) }, "Serbia", "Serbian", "sr"),
-                //new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(1450, 1800) }, "Montenegro", "Montenegrin", "sr"),
-                //new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(1506, 1980) }, "Albania", "Albanian", "sq"),
+                new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(1450, 1900) }, "Montenegro", "Montenegrin", "sr"),
+                new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(1506, 1980) }, "Albania", "Albanian", "sq"),
                 new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(1580, 1950) }, "North Macedonia", "Macedonian", "mk"),
-                new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(1700, 1900) }, "Bulgaria", "Bulgarian", "bg"),
-                new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(1700, 2137) }, "Greece", "Greek", "el"),
-                new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(2222, 1888) }, "Turkey", "Turkish", "tr"),
+                new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(1700, 1870) }, "Bulgaria", "Bulgarian", "bg"),
+                new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(1700, 2137), Tuple.Create(1717, 2121), Tuple.Create(1818, 2323), Tuple.Create(1555, 2160), Tuple.Create(1837, 2056), Tuple.Create(1825, 2100), Tuple.Create(1950, 2222) }, "Greece", "Greek", "el"),
+                new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(2222, 1888), Tuple.Create(1900, 1900) }, "Turkey", "Turkish", "tr"),
                 new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(1450, 715) }, "Finland", "Finnish", "fi"),
-                new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(1200, 700) }, "Sweden", "Swedish", "sv"),
+                new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(1200, 700), Tuple.Create(1310, 950), Tuple.Create(1254, 1007) }, "Sweden", "Swedish", "sv"),
                 new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(1000, 1050) }, "Denmark", "Danish", "da"),
                 new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(1566, 1040) }, "Lithuania", "Lithuanian", "lt"),
                 new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(1560, 950) }, "Latvia", "Latvian", "lv"),
-                new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(1540, 840) }, "Estonia", "Estonian", "et"),
+                new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(1540, 840), Tuple.Create(1440, 840), Tuple.Create(1440, 870) }, "Estonia", "Estonian", "et"),
                 new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(1700, 1170) }, "Belarus", "Belarusian", "be"),
                 new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(1814, 1520) }, "Moldova", "Moldovan", "ro"),
                 new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(1536, 1890) }, "Kosovo", "Kosovan", "sq"),
@@ -169,21 +169,20 @@ namespace WinFormsApp1
                     {
                         Bitmap originalImage = (Bitmap)Image.FromStream(fs);
 
-                        // Create a dictionary to store colors for each cluster
                         Dictionary<int, Color> clusterColors = new Dictionary<int, Color>();
 
-                        // Define colors for each cluster (you can customize this as needed)
-                        Color[] predefinedColors = new Color[] { Color.Red, Color.Blue, Color.Green, Color.Yellow, Color.Orange };
+                        // Get the number of clusters
+                        int numClusters = countryTranslations.Max(c => c.Cluster) + 1;
+
+                        // Generate colors for each cluster
+                        List<Color> generatedColors = GenerateColors(numClusters);
 
                         // Assign colors to clusters
-                        int clusterIndex = 0;
                         foreach (var country in countryTranslations)
                         {
                             if (!clusterColors.ContainsKey(country.Cluster))
                             {
-                                // Assign a color to the cluster if not already assigned
-                                clusterColors[country.Cluster] = predefinedColors[clusterIndex % predefinedColors.Length];
-                                clusterIndex++;
+                                clusterColors[country.Cluster] = generatedColors[country.Cluster];
                             }
                         }
 
@@ -212,7 +211,20 @@ namespace WinFormsApp1
             }
         }
 
+        private static List<Color> GenerateColors(int numColors)
+        {
+            List<Color> colors = new List<Color>();
+            Random rand = new Random();
 
+            for (int i = 0; i < numColors; i++)
+            {
+                // Generate random colors
+                Color color = Color.FromArgb(rand.Next(256), rand.Next(256), rand.Next(256));
+                colors.Add(color);
+            }
+
+            return colors;
+        }
         private void RunPythonScript(string scriptPath)
         {
             try
@@ -312,9 +324,10 @@ namespace WinFormsApp1
                 graphics.DrawString(text, font, Brushes.Black, rect, stringFormat);
 
                 // Draw the Latin version in brackets next to the original text
-                if (!string.IsNullOrEmpty(latinText) && latinText != text)
+                if ((!string.IsNullOrEmpty(latinText) && latinText.ToUpper() != text.ToUpper()) )
                 {
-                    string latinTextWithBrackets = $"({latinText}) [{cluster}]";
+                    //string latinTextWithBrackets = $"({latinText}) [{cluster}]";
+                    string latinTextWithBrackets = $"({latinText})";
                     Size latinTextSize = TextRenderer.MeasureText(latinTextWithBrackets, font);
                     Rectangle latinRect = new Rectangle(absCenterX - latinTextSize.Width / 2, absCenterY + textSize.Height / 2, latinTextSize.Width, latinTextSize.Height);
                     graphics.DrawString(latinTextWithBrackets, font, Brushes.Black, latinRect, stringFormat);
