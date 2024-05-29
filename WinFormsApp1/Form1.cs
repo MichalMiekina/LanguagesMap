@@ -10,6 +10,8 @@ using LanguagesMap;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.Linq;
+using System.Text;
+
 
 namespace WinFormsApp1
 {
@@ -30,18 +32,11 @@ namespace WinFormsApp1
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            // Add language options to the ComboBox
             comboBox1.Items.Add("Polish");
             comboBox1.Items.Add("French");
             comboBox1.Items.Add("English");
-            //comboBox1.Items.Add("Italian");
-            //comboBox1.Items.Add("German");
-            //comboBox1.Items.Add("Russian");
+            comboBox1.SelectedIndex = 0; 
 
-            // Set default selection
-            comboBox1.SelectedIndex = 0; // Select the first item by default
-
-            // Initialize the stopwatch
             stopwatch = new Stopwatch();
 
             // Create the label for displaying elapsed time
@@ -64,52 +59,9 @@ namespace WinFormsApp1
             string fromLanguageCode = GetLanguageCode(fromLanguageName); // Convert language name to language code
             TranslateAndDisplay(inputText, fromLanguageCode);
         }
-
-        private void TranslateAndDisplay(string inputText, string fromLanguage)
+        private List<CountryTranslation> initCountries()
         {
-            // Dictionary to map language names to language codes
-            Dictionary<string, string> languageCodes = new Dictionary<string, string>
-            {
-                {"Polish", "pl"},
-                {"French", "fr"},
-                {"English", "en"},
-                {"German", "de"},
-                {"Italian", "it"},
-                {"Spanish", "es"},
-                {"Dutch", "nl"},
-                {"Luxembourgish", "lb"},
-                {"Czech", "cs"},
-                {"Slovak", "sk"},
-                {"Hungarian", "hu"},
-                {"Croatian", "hr"},
-                {"Bosnian", "bs"},
-                {"Serbian", "sr"},
-                {"Montenegrin", "cnr"},
-                {"Albanian", "sq"},
-                {"Greek", "el"},
-                {"Bulgarian", "bg"},
-                {"Romanian", "ro"},
-                {"Slovene", "sl"},
-                {"Macedonian", "mk"},
-                {"Ukrainian", "uk"},
-                {"Belarusian", "be"},
-                {"Lithuanian", "lt"},
-                {"Latvian", "lv"},
-                {"Estonian", "et"},
-                {"Norwegian", "no"},
-                {"Swedish", "sv"},
-                {"Finnish", "fi"},
-                {"Icelandic", "is"},
-                {"Portuguese", "pt"},
-                {"Irish", "ga"},
-                {"Maltese", "mt"},
-                {"Russian", "ru"},
-                {"Moldovan", "ro"},  // Moldovan is essentially Romanian
-                {"Kosovan", "sq"}, // Official languages in Kosovo are Albanian and Serbian
-                {"Cypriot", "el"} // Greek is one of the official languages in Cyprus
-            };
-
-            List<CountryTranslation> countryTranslations = new List<CountryTranslation>
+            return new List<CountryTranslation>
             {
                 new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(1377, 1277) }, "Poland", "Polish", "pl"),
                 new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(700, 1640) }, "France", "French", "fr"),
@@ -133,8 +85,8 @@ namespace WinFormsApp1
                 new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(1333, 1717) }, "Croatia", "Croatian", "hr"),
                 new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(1380, 1810) }, "Bosnia and Herzegovina", "Bosnian", "bs"),
                 new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(1530, 1790) }, "Serbia", "Serbian", "sr"),
-                new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(1450, 1800) }, "Montenegro", "Montenegrin", "sr"),
-                new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(1506, 1980) }, "Albania", "Albanian", "sq"),
+                //new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(1450, 1800) }, "Montenegro", "Montenegrin", "sr"),
+                //new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(1506, 1980) }, "Albania", "Albanian", "sq"),
                 new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(1580, 1950) }, "North Macedonia", "Macedonian", "mk"),
                 new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(1700, 1900) }, "Bulgaria", "Bulgarian", "bg"),
                 new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(1700, 2137) }, "Greece", "Greek", "el"),
@@ -152,61 +104,166 @@ namespace WinFormsApp1
                 new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(263, 347) }, "Iceland", "Icelandic", "is"),
                 new CountryTranslation(new List<Tuple<int, int>> { Tuple.Create(2233, 2222) }, "Cyprus", "Cypriot", "el")
             };
-
+        }
+        private void TranslateAndDisplay(string inputText, string fromLanguage)
+        {
+            List<CountryTranslation> countryTranslations = initCountries();
 
             // Translate country names and update the results
             foreach (var country in countryTranslations)
             {
                 country.TranslationResult = TranslateText(inputText, fromLanguage, country.LanguageCode);
             }
+
             // Create a new list with only CountryName and TranslationResult properties
-            var simplifiedTranslations = countryTranslations.Select(ct => new { CountryName = ct.CountryName, TranslationResult = ct.TranslationResult }).ToList();
+            var simplifiedTranslations = countryTranslations.Select(ct => new { ct.CountryName, ct.TranslationResult }).ToList();
 
             // Serialize the list of simplified translations into JSON format
             string jsonOutput = JsonConvert.SerializeObject(simplifiedTranslations);
 
             // Specify the path for the JSON output file
-            string jsonFilePath = Path.Combine("translated", "translations.json");
+            string jsonFilePath = Path.Combine("", "translations.json");
 
             // Write the JSON data to a file
             File.WriteAllText(jsonFilePath, jsonOutput);
 
             // Display a message box with the path to the JSON file
             MessageBox.Show($"Translation results saved to: {jsonFilePath}");
-            // Load the map image
-            string imagePath = "./europe.png"; // Update this with the path to your image file
-            try
+
+            // Run the Python script
+            string exeDirectory = Path.GetDirectoryName(Application.ExecutablePath);
+
+            string pythonScriptPath = Path.Combine(exeDirectory, "", "group.py");
+            RunPythonScript(pythonScriptPath);
+
+            // Path to the updated JSON file
+            string updatedJsonFilePath = Path.Combine("", "updated_translations.json");
+            // Wait for the Python script to complete and the new JSON file to appear
+            if (File.Exists(updatedJsonFilePath))
             {
-                using (FileStream fs = new FileStream(imagePath, FileMode.Open))
+                // Read the updated JSON data from the file
+                string updatedJsonData = File.ReadAllText(updatedJsonFilePath);
+
+                // Deserialize the JSON data into a list of CountryTranslation objects
+                var updatedCountryTranslations = JsonConvert.DeserializeObject<List<CountryTranslation>>(updatedJsonData);
+
+                // Merge the newly loaded data with the existing translations
+                var existingTranslationsDict = countryTranslations.ToDictionary(ct => ct.CountryName);
+                foreach (var updatedCountry in updatedCountryTranslations)
                 {
-                    Bitmap originalImage = (Bitmap)Image.FromStream(fs);
-
-                    // Fill regions with color before adding text
-                    foreach (var country in countryTranslations)
+                    if (existingTranslationsDict.ContainsKey(updatedCountry.CountryName))
                     {
-                        foreach (var coord in country.Coordinates)
-                        {
-                            Point regionPoint = new Point(coord.Item1, coord.Item2); // Point within the region
-                            Color targetColor = originalImage.GetPixel(regionPoint.X, regionPoint.Y); // The color to be replaced
-                            Color fillColor = Color.FromArgb(128, Color.Red); // Semi-transparent red fill color
-                            FloodFill(originalImage, regionPoint, targetColor, fillColor);
-                        }
+                        var existingCountry = existingTranslationsDict[updatedCountry.CountryName];
+                        existingCountry.TranslationResultLatin = updatedCountry.TranslationResultLatin;
+                        existingCountry.Cluster = updatedCountry.Cluster;
                     }
+                    else
+                    {
+                        countryTranslations.Add(updatedCountry);
+                    }
+                }
+                string imagePath = "./europe.png"; // Update this with the path to your image file
+                try
+                {
+                    using (FileStream fs = new FileStream(imagePath, FileMode.Open))
+                    {
+                        Bitmap originalImage = (Bitmap)Image.FromStream(fs);
 
-                    // Display translated image with text
-                    DisplayTranslatedImage(originalImage, countryTranslations);
+                        // Create a dictionary to store colors for each cluster
+                        Dictionary<int, Color> clusterColors = new Dictionary<int, Color>();
+
+                        // Define colors for each cluster (you can customize this as needed)
+                        Color[] predefinedColors = new Color[] { Color.Red, Color.Blue, Color.Green, Color.Yellow, Color.Orange };
+
+                        // Assign colors to clusters
+                        int clusterIndex = 0;
+                        foreach (var country in countryTranslations)
+                        {
+                            if (!clusterColors.ContainsKey(country.Cluster))
+                            {
+                                // Assign a color to the cluster if not already assigned
+                                clusterColors[country.Cluster] = predefinedColors[clusterIndex % predefinedColors.Length];
+                                clusterIndex++;
+                            }
+                        }
+
+                        // Fill regions with the specified color
+                        foreach (var country in countryTranslations)
+                        {
+                            foreach (var coord in country.Coordinates)
+                            {
+                                Point regionPoint = new Point(coord.Item1, coord.Item2); // Point within the region
+                                Color fillColor = Color.Blue; // Choose the color you want here
+                                FloodFill(originalImage, regionPoint, fillColor);
+                            }
+                        }
+
+
+                        // Display translated image with text
+                        DisplayTranslatedImage(originalImage, countryTranslations);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Failed to load image: {ex.Message}");
                 }
 
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show($"Failed to load image: {ex.Message}");
+                MessageBox.Show("Updated translations JSON file not found.");
             }
         }
 
-        private void FloodFill(Bitmap bmp, Point pt, Color targetColor, Color replacementColor)
+
+        private void RunPythonScript(string scriptPath)
         {
-            if (targetColor.ToArgb() == replacementColor.ToArgb())
+            try
+            {
+                ProcessStartInfo start = new ProcessStartInfo();
+                start.FileName = "python"; // Assumes python is in the PATH environment variable
+                start.Arguments = scriptPath;
+                start.UseShellExecute = false;
+                start.CreateNoWindow = true; // Suppress the creation of a window
+                start.RedirectStandardOutput = true;
+                start.RedirectStandardError = true; // Redirect standard error stream
+
+                using (Process process = new Process())
+                {
+                    process.StartInfo = start;
+                    process.OutputDataReceived += (sender, e) =>
+                    {
+                        // Handle output if needed
+                    };
+                    process.ErrorDataReceived += (sender, e) =>
+                    {
+                        if (!string.IsNullOrEmpty(e.Data))
+                        {
+                            // Display error message
+                            //MessageBox.Show("Error running Python script: " + e.Data, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    };
+
+                    process.Start();
+                    process.BeginOutputReadLine();
+                    process.BeginErrorReadLine();
+                    process.WaitForExit();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Failed to run Python script: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+
+
+        private void FloodFill(Bitmap bmp, Point pt, Color replacementColor)
+        {
+            Color targetColor = bmp.GetPixel(pt.X, pt.Y);
+
+            if (targetColor == replacementColor)
                 return;
 
             Stack<Point> pixels = new Stack<Point>();
@@ -230,7 +287,9 @@ namespace WinFormsApp1
             }
         }
 
-        private void AddTextToImage(Image image, string text, int centerX, int centerY, int originalWidth, int originalHeight)
+
+
+        private void AddTextToImage(Image image, string text, string latinText, int centerX, int centerY, int originalWidth, int originalHeight, int cluster)
         {
             using (Graphics graphics = Graphics.FromImage(image))
             using (Font font = new Font("Arial", 20, FontStyle.Bold))
@@ -252,10 +311,20 @@ namespace WinFormsApp1
                 Size textSize = TextRenderer.MeasureText(text, font);
                 Rectangle rect = new Rectangle(absCenterX - textSize.Width / 2, absCenterY - textSize.Height / 2, textSize.Width, textSize.Height);
 
-                // Draw the text on the image
+                // Draw the original text on the image
                 graphics.DrawString(text, font, Brushes.Black, rect, stringFormat);
+
+                // Draw the Latin version in brackets next to the original text
+                if (!string.IsNullOrEmpty(latinText) && latinText != text)
+                {
+                    string latinTextWithBrackets = $"({latinText}) [{cluster}]";
+                    Size latinTextSize = TextRenderer.MeasureText(latinTextWithBrackets, font);
+                    Rectangle latinRect = new Rectangle(absCenterX - latinTextSize.Width / 2, absCenterY + textSize.Height / 2, latinTextSize.Width, latinTextSize.Height);
+                    graphics.DrawString(latinTextWithBrackets, font, Brushes.Black, latinRect, stringFormat);
+                }
             }
         }
+
 
         private void DisplayTranslatedImage(Image originalImage, List<CountryTranslation> countryTranslations)
         {
@@ -265,7 +334,7 @@ namespace WinFormsApp1
             // Add translated text to the image for each country
             foreach (var country in countryTranslations)
             {
-                AddTextToImage(modifiedImage, country.TranslationResult,country.Coordinates[0].Item1, country.Coordinates[0].Item2, originalImage.Width, originalImage.Height);
+                AddTextToImage(modifiedImage, country.TranslationResult, country.TranslationResultLatin, country.Coordinates[0].Item1, country.Coordinates[0].Item2, originalImage.Width, originalImage.Height,country.Cluster);
             }
 
             // Save the modified image locally
@@ -283,9 +352,6 @@ namespace WinFormsApp1
                 // Save the image
                 modifiedImage.Save(outputPath, System.Drawing.Imaging.ImageFormat.Png);
 
-                // Display a message box with the path to the saved image
-                MessageBox.Show($"Modified image saved to: {outputPath}");
-
                 // Display the modified image in a new window
                 ShowModifiedImageForm(modifiedImage);
             }
@@ -294,6 +360,7 @@ namespace WinFormsApp1
                 MessageBox.Show($"Failed to save image: {ex.Message}");
             }
         }
+
 
         private void ShowModifiedImageForm(Image modifiedImage)
         {

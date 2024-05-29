@@ -10,6 +10,7 @@ namespace LanguagesMap
         public string Language { get; set; } // Language
         public string LanguageCode { get; set; } // Language code
         public string TranslationResult { get; set; } // Translation result
+        public string TranslationResultLatin { get; set; } // Translation result
         public int Cluster { get; set; }
 
         // Constructor
@@ -19,7 +20,8 @@ namespace LanguagesMap
             CountryName = countryName;
             Language = language;
             LanguageCode = languageCode;
-            TranslationResult = null; // Initialize translation result as null
+            TranslationResult = null;
+            TranslationResultLatin = null;
             Cluster = 0;
         }
     }
