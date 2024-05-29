@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LanguagesMap
 {
     public class CountryTranslation
     {
-        public int X { get; set; } // X coordinate
-        public int Y { get; set; } // Y coordinate
+        public List<Tuple<int, int>> Coordinates { get; set; } // List of paired coordinates
         public string CountryName { get; set; } // Name of the country
         public string Language { get; set; } // Language
         public string LanguageCode { get; set; } // Language code
@@ -17,10 +13,9 @@ namespace LanguagesMap
         public int Cluster { get; set; }
 
         // Constructor
-        public CountryTranslation(int x, int y, string countryName, string language, string languageCode)
+        public CountryTranslation(List<Tuple<int, int>> coordinates, string countryName, string language, string languageCode)
         {
-            X = x;
-            Y = y;
+            Coordinates = coordinates;
             CountryName = countryName;
             Language = language;
             LanguageCode = languageCode;
@@ -28,5 +23,4 @@ namespace LanguagesMap
             Cluster = 0;
         }
     }
-
 }
